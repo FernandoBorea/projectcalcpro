@@ -6,6 +6,9 @@ from django.core.validators import MinValueValidator
 # Create your models here.
 class User(AbstractUser):
     id = models.AutoField(primary_key=True)
+    # For a default one-to-many, this is not ideal, but will enable multiple users
+    # to track a single project on future versions
+    saved_projects = models.ManyToManyField(to='Project', related_name='saved_by')
 
     def __str__(self):
         return f'{self.username}'
@@ -24,7 +27,7 @@ class Project(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=3000, blank=True)
-    materials = models.ManyToManyField(to=Material, on_delete=models.CASCADE, related_name='projects')
+    materials = models.ManyToManyField(to=Material, related_name='projects')
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_created=True)
     
