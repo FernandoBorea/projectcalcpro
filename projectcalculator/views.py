@@ -43,6 +43,22 @@ def logout(request):
 
 
 def login(request):
+
+    if request.method == 'POST':
+        login_form = LoginForm(request.POST)
+
+        if login_form.is_valid():
+            user = authenticate(request, username=login_form.cleaned_data['email'], password=login_form.cleaned_data['password'])
+
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect(reverse('index'))
+            
+            return render(request, 'projectcalculator/login.html', {
+                'message': 'Invalid credentials',
+                'login_form': LoginForm()
+            })
+    
     return render(request, 'projectcalculator/login.html', {
         'login_form': LoginForm()
     })
