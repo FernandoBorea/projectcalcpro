@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from .forms import *
 
 # Create your views here.
 @login_required(login_url='login')
@@ -42,8 +43,12 @@ def logout(request):
 
 
 def login(request):
-    return render(request, 'projectcalculator/login.html')
+    return render(request, 'projectcalculator/login.html', {
+        'login_form': LoginForm()
+    })
 
 
 def register(request):
-    return render(request, 'projectcalculator/register.html')
+    return render(request, 'projectcalculator/register.html', {
+        'register_form': RegisterForm()
+    })

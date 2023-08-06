@@ -2,6 +2,27 @@
 
 {% block body%}
 
-    <h1>Test</h1>
+    <div class='p-3 m-3 shadow border border-1 rounded-3'>
+        <h1 class='mb-3'>Register</h1>
+        <hr>
+        <form clas="mt-3" method="post">
+            <div class="mb-3">
+                <label for="{{ register_form.email.id_for_label }}" class="form-label">Email address</label>
+                {{ register_form.email }}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ register_form.password.id_for_label }}" class="form-label">Password</label>
+                {{ register_form.password }}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ register_form.password_confirmation.id_for_label }}" class="form-label">Confirm password</label>
+                {{ register_form.password_confirmation }}
+            </div>
+
+            <button type="submit" class="btn btn-outline-primary">Register</button>
+        </form>
+    </div>
     
 {% endblock %}
