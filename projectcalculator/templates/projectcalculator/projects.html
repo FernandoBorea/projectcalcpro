@@ -1,0 +1,59 @@
+{% extends 'projectcalculator/layout.html' %}
+
+{% block body %}
+
+    <div class='p-3 m-3 shadow border border-1 rounded-3 col-8 mx-auto'>
+
+        {% if message %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+
+        <h1 class='mb-3'>Add Project</h1>
+        <hr>
+        <form clas="mt-3" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="projectName" class="form-label">Project Name</label>
+                <input type="text" class="form-control" id="projectName">
+            </div>
+
+            <div class="mb-3">
+                <label for="projectDescription" class="form-label">Project Description</label>
+                <textarea class="form-control" id="projectDescription" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="projectMaterials" class="form-label">Materials Used</label>
+                <select id="projectMaterials" multiple="multiple">
+                    <option value="cheese">Cheese</option>
+                    <option value="tomatoes">Tomatoes</option>
+                    <option value="mozarella">Mozzarella</option>
+                    <option value="mushrooms">Mushrooms</option>
+                    <option value="pepperoni">Pepperoni</option>
+                    <option value="onions">Onions</option>
+                </select>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="materialPrice" class="form-label">Price</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="text" class="form-control" id="materialPrice">
+                    </div>
+                </div>
+
+                <div class="col">
+                    <label for="materialUnit" class="form-label">Units</label>
+                    <input type="text" class="form-control" id="materialUnit">
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-outline-primary">Create</button>
+        </form>
+    </div>
+
+{% endblock %}

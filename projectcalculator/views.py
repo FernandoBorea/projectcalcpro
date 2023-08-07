@@ -19,7 +19,7 @@ def materials(request):
 
 @login_required(login_url='login')
 def projects(request):
-    pass
+    return render(request, 'projectcalculator/projects.html')
 
 
 @login_required(login_url='saved_projects')
