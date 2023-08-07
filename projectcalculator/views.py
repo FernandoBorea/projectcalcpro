@@ -9,12 +9,12 @@ from .forms import *
 # Create your views here.
 @login_required(login_url='login')
 def index(request):
-    pass
+    return render(request, 'projectcalculator/index.html')
 
 
 @login_required(login_url='login')
 def materials(request):
-    pass
+    return render(request, 'projectcalculator/materials.html')
 
 
 @login_required(login_url='login')
@@ -38,11 +38,12 @@ def profile(request):
 
 
 @login_required(login_url='login')
-def logout(request):
-    pass
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('login'))
 
 
-def login(request):
+def login_view(request):
 
     if request.method == 'POST':
         login_form = LoginForm(request.POST)
@@ -65,6 +66,36 @@ def login(request):
 
 
 def register(request):
+
+    if request.method == 'POST':
+        register_form = RegisterForm(request.POST)
+
+        if register_form.is_valid():
+
+            password = register_form.cleaned_data['password']
+            confirmation = register_form.cleaned_data['password_confirmation']
+
+            if password != confirmation:
+                return render(request, 'projectcalculator/register.html', {
+                    'message': 'Password and confirmation doesn\'t match',
+                    'register_form': RegisterForm()
+                })
+
+            username = register_form.cleaned_data['email']
+            email = register_form.cleaned_data['email']
+
+            try:
+                user = User.objects.create_user(username, email, password)
+                user.save()
+            except IntegrityError:
+                return render(request, 'projectcalculator/register.html', {
+                    'message': 'Email already taken',
+                    'register_form': RegisterForm()
+                })
+            
+            login(request, user)
+            return HttpResponseRedirect(reverse('index'))
+
     return render(request, 'projectcalculator/register.html', {
         'register_form': RegisterForm()
     })

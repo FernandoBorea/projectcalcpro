@@ -1,0 +1,60 @@
+{% extends 'projectcalculator/layout.html' %}
+
+{% block body %}
+
+    <div class='p-3 m-3 shadow border border-1 rounded-3 col-8 mx-auto'>
+
+        {% if message %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+
+        <h1 class='mb-3'>Add material</h1>
+        <hr>
+        <form clas="mt-3" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="materialName" class="form-label">Name</label>
+                <input type="text" class="form-control" id="materialName">
+            </div>
+
+            <div class="mb-3">
+                <label for="materialDescription" class="form-label">Description</label>
+                <textarea class="form-control" id="materialDescription" rows="3"></textarea>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="materialPrice" class="form-label">Price</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="text" class="form-control" id="materialPrice">
+                    </div>
+                </div>
+
+                <div class="col">
+                    <label for="materialUnit" class="form-label">Units</label>
+                    <input type="text" class="form-control" id="materialUnit">
+                </div>
+            </div>
+
+            <!-- <div class="mb-3">
+                <label for="materialPrice" class="form-label">Price</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="text" class="form-control" id="materialPrice">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="materialUnit" class="form-label">Units</label>
+                <input type="text" class="form-control" id="materialUnit">
+            </div> -->
+
+            <button type="submit" class="btn btn-outline-primary">Create</button>
+        </form>
+    </div>
+
+{% endblock %}
