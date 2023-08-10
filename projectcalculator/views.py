@@ -14,7 +14,9 @@ def index(request):
 
 @login_required(login_url='login')
 def materials(request):
-    return render(request, 'projectcalculator/materials.html')
+    return render(request, 'projectcalculator/materials.html', {
+        'material_form': MaterialForm()
+    })
 
 
 @login_required(login_url='login')

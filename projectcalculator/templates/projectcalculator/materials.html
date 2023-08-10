@@ -16,27 +16,27 @@
         <form clas="mt-3" method="post">
             {% csrf_token %}
             <div class="mb-3">
-                <label for="materialName" class="form-label">Material Name</label>
-                <input type="text" class="form-control" id="materialName">
+                <label for="{{ material_form.name.id_for_label }}" class="form-label">Material Name</label>
+                {{ material_form.name }}
             </div>
 
             <div class="mb-3">
-                <label for="materialDescription" class="form-label">Project Description</label>
-                <textarea class="form-control" id="materialDescription" rows="3"></textarea>
+                <label for="{{ material_form.description.id_for_label }}" class="form-label">Project Description</label>
+                {{ material_form.description }}
             </div>
 
             <div class="row mb-3">
                 <div class="col">
-                    <label for="materialPrice" class="form-label">Price</label>
+                    <label for="{{ material_form.price.id_for_label }}" class="form-label">Price</label>
                     <div class="input-group">
                         <span class="input-group-text">$</span>
-                        <input type="text" class="form-control" id="materialPrice">
+                        {{ material_form.price }}
                     </div>
                 </div>
 
                 <div class="col">
-                    <label for="materialUnit" class="form-label">Units</label>
-                    <input type="text" class="form-control" id="materialUnit">
+                    <label for="{{ material_form.unit.id_for_label }}" class="form-label">Units</label>
+                    {{ material_form.unit }}
                 </div>
             </div>
 

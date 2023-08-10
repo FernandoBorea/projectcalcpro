@@ -17,7 +17,7 @@ class User(AbstractUser):
 class Material(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200)
-    descrption = models.CharField(max_length=3000, blank=True)
+    description = models.CharField(max_length=3000, blank=True)
     unit = models.CharField(max_length=20)
     price = models.DecimalField(max_digits=9, decimal_places=2, validators=[MinValueValidator(0)])
     created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='materials')
