@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.core.paginator import Paginator
 from .forms import *
 
 # Create your views here.
@@ -14,8 +15,42 @@ def index(request):
 
 @login_required(login_url='login')
 def materials(request):
+
+    if request.method == 'POST':
+        material_form = MaterialForm(request.POST)
+
+        if material_form.is_valid():
+            # This takes form instance into a model instance
+            new_material = material_form.save(commit=False)
+
+            # Fill missing fields that aren't present in form and save
+            new_material.created_by = request.user
+            new_material.save()
+
+            return HttpResponseRedirect(reverse('materials'))
+
+    materials = Material.objects.filter(created_by=request.user).order_by('created_on')
+    paginator = Paginator(materials, 9)
+
+    # Check if we got a valid page GET argument
+    requested_page = request.GET.get('page', '1')
+
+    try:
+        requested_page = int(requested_page)
+    except ValueError:
+        return HttpResponseRedirect(reverse('materials'))
+    
+    if requested_page > paginator.num_pages:
+        return HttpResponseRedirect(reverse('materials'))
+    
+    # If we don't have any errors, return requested page
+    page_obj = paginator.get_page(requested_page)
+    page_range = paginator.page_range
+
     return render(request, 'projectcalculator/materials.html', {
-        'material_form': MaterialForm()
+        'material_form': MaterialForm(),
+        'materials_page_obj': page_obj,
+        'paginator_range': page_range
     })
 
 
