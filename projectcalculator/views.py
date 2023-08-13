@@ -56,7 +56,9 @@ def materials(request):
 
 @login_required(login_url='login')
 def projects(request):
-    return render(request, 'projectcalculator/projects.html')
+    return render(request, 'projectcalculator/projects.html', {
+        'project_form': ProjectForm()
+    })
 
 
 @login_required(login_url='saved_projects')

@@ -26,3 +26,15 @@ class MaterialForm(forms.ModelForm):
             'unit': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter the material price per unit'}),
             'price': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter the material unit of measure'})
         }
+
+
+class ProjectForm(forms.ModelForm):
+
+    class Meta:
+        model = Project
+        fields = ('name', 'description', 'materials')
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter the project name'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter the project description'}),
+            'materials': forms.CheckboxSelectMultiple(attrs={'class': 'form-control'})
+        }

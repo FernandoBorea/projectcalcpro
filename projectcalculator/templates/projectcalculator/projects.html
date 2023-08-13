@@ -13,7 +13,14 @@
 
         <h1 class='mb-3'>Add Project</h1>
         <hr>
-        <form clas="mt-3" method="post">
+
+        <form action="">
+            {% csrf_token %}
+            {{ project_form }}
+            <input type="submit" class='btn btn-outline-primary' value="Create Project">
+        </form>
+
+        <!-- <form clas="mt-3" method="post">
             {% csrf_token %}
             <div class="mb-3">
                 <label for="projectName" class="form-label">Project Name</label>
@@ -53,7 +60,7 @@
             </div>
 
             <button type="submit" class="btn btn-outline-primary">Create</button>
-        </form>
+        </form> -->
     </div>
 
 {% endblock %}
