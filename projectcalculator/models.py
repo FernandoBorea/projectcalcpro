@@ -23,6 +23,9 @@ class Material(models.Model):
     created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name='materials')
     created_on = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f'{self.name} (${self.price}/{self.unit})'
+
 
 class Project(models.Model):
     id = models.AutoField(primary_key=True)
@@ -31,4 +34,7 @@ class Project(models.Model):
     materials = models.ManyToManyField(to=Material, related_name='projects')
     created_by = models.ForeignKey(to=User, on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.name}'
     

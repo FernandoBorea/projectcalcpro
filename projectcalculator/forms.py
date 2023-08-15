@@ -38,6 +38,17 @@ class ProjectForm(forms.ModelForm):
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter the project name'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter the project description'}),
-            'materials': forms.CheckboxSelectMultiple(attrs={'class': 'form-control'})
+            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter the project description', 'rows': '5'}),
+            'materials': forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
         }
+
+    def __init__(self, *args, **kwargs):
+
+        # Store the request object
+        self.request = kwargs.pop('request') if 'request' in kwargs else None
+
+        # Unsure what this does, will research
+        super(ProjectForm, self).__init__(*args, **kwargs)
+
+        # Adding queryset to materials field
+        self.fields['materials'].queryset = Material.objects.filter(created_by=self.request.user)
