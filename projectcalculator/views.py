@@ -56,6 +56,21 @@ def materials(request):
 
 @login_required(login_url='login')
 def projects(request):
+
+    if request.method == 'POST':
+        project_form = ProjectForm(request.POST, request=request)
+        
+        if project_form.is_valid():
+            
+            # Takes form instance and turn it into model instance
+            new_project = project_form.save(commit=False)
+
+            # Fill missing data
+            new_project.created_by = request.user
+            new_project.save()
+
+            return HttpResponseRedirect(reverse('projects'))
+        
     return render(request, 'projectcalculator/projects.html', {
         'project_form': ProjectForm(request=request)
     })
