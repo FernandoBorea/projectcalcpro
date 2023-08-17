@@ -45,5 +45,28 @@
 
     <div class="mb-3 projects-card-container">
         
+        {% if not materials_page_obj %}
+            <div class="alert alert-secondary">Your created projects will show here:D</div>
+        {% else %}
+            <div class="row row-cols-3">
+
+                {% for project in projects_page_obj %}
+                    <div>
+                        <div class="material-card-container card shadow border border-1 rounded-3 col m-3">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ project.name }}</h5>
+                                <p class="card-text">{{ project.description|truncatewords:30 }}</p>
+
+                                <!-- Slice the first 3 materials with this info: https://docs.djangoproject.com/en/4.2/ref/templates/builtins/ -->
+                                
+                                <h6 class="card-subtitle mb-3 text-body-secondary">${{ material.price }}/{{ material.unit }}</h6>
+                                <a href="#" class="btn btn-outline-primary">View project</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
