@@ -70,10 +70,32 @@ def projects(request):
             new_project.save()
 
             return HttpResponseRedirect(reverse('projects'))
-        
+
+    projects = Project.objects.filter(created_by=request.user).order_by('created_on')
+    paginator = Paginator(projects, 9)
+
+    # Check if we got a valid page GET argument
+    requested_page = request.GET.get('page', '1')
+
+    try:
+        requested_page = int(requested_page)
+    except ValueError:
+        return HttpResponseRedirect(reverse('projects'))
+    
+    if requested_page > paginator.num_pages:
+        return HttpResponseRedirect(reverse('projects'))
+    
+    # If we don't have any errors, return requested page
+    page_obj = paginator.get_page(requested_page)
+    page_range = paginator.page_range
+   
     return render(request, 'projectcalculator/projects.html', {
-        'project_form': ProjectForm(request=request)
+        'project_form': ProjectForm(request=request),
+        'projects_page_obj': page_obj,
+        'paginator_range': page_range
     })
+
+# Fix error on projects view, it's not receiving materials
 
 
 @login_required(login_url='saved_projects')
