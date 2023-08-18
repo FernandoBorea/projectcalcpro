@@ -34,7 +34,7 @@ class ProjectForm(forms.ModelForm):
         model = Project
         fields = ('name', 'description', 'materials')
 
-        materials = forms.ModelMultipleChoiceField(queryset=Material.objects.all())
+        materials = forms.ModelMultipleChoiceField(queryset=None)
 
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter the project name'}),
@@ -51,4 +51,5 @@ class ProjectForm(forms.ModelForm):
         super(ProjectForm, self).__init__(*args, **kwargs)
 
         # Adding queryset to materials field
-        self.fields['materials'].queryset = Material.objects.filter(created_by=self.request.user)
+        if self.request != None:
+            self.fields['materials'].queryset = Material.objects.filter(created_by=self.request.user)

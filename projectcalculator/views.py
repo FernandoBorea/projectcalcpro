@@ -59,7 +59,7 @@ def projects(request):
 
     if request.method == 'POST':
         project_form = ProjectForm(request.POST, request=request)
-        
+
         if project_form.is_valid():
             
             # Takes form instance and turn it into model instance
@@ -68,6 +68,7 @@ def projects(request):
             # Fill missing data
             new_project.created_by = request.user
             new_project.save()
+            project_form.save_m2m()
 
             return HttpResponseRedirect(reverse('projects'))
 

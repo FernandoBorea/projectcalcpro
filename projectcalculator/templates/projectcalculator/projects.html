@@ -32,8 +32,7 @@
 
                 {% for checkbox in project_form.materials %}
                     <div class="form-check">
-                        {{ checkbox.tag }}
-                        <label for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
+                        {{ checkbox }}
                     </div>
                 {% endfor %}
                 
@@ -59,14 +58,18 @@
 
                                 <!-- Slice the first 3 materials with this info: https://docs.djangoproject.com/en/4.2/ref/templates/builtins/ -->
                                 
-                                <h6 class="card-subtitle mb-3 text-body-secondary">Materials:</h6>
+                                <h6 class="card-subtitle text-body-secondary">Materials:</h6>
 
                                 <ul class="list-group list-group-flush">
-                                    {% for material in project.materials.all %}
+                                    {% for material in project.materials.all | slice: ':3' %}
                                         <li class="list-group-item">{{ material.name }}</li>
                                         {% empty %}
                                         <div class="alert alert-secondary">This project doesn't have materials</div>
                                     {% endfor %}
+
+                                    {% if project.materials.all.count > 3 %}
+                                        <li class="list-group-item">...</li>
+                                    {% endif %}
                                 </ul>
 
                                 <a href="#" class="btn btn-outline-primary">View project</a>
