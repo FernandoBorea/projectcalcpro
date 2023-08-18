@@ -28,28 +28,28 @@ class MaterialForm(forms.ModelForm):
         }
 
 
-class ProjectForm(forms.ModelForm):
+# class ProjectForm(forms.ModelForm):
 
-    class Meta:
-        model = Project
-        fields = ('name', 'description', 'materials')
+#     class Meta:
+#         model = Project
+#         fields = ('name', 'description', 'materials')
 
-        materials = forms.ModelMultipleChoiceField(queryset=None)
+#         materials = forms.ModelMultipleChoiceField(queryset=None)
 
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter the project name'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter the project description', 'rows': '5'}),
-            'materials': forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
-        }
+#         widgets = {
+#             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter the project name'}),
+#             'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter the project description', 'rows': '5'}),
+#             'materials': forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
+#         }
 
-    def __init__(self, *args, **kwargs):
+#     def __init__(self, *args, **kwargs):
 
-        # Store the request object
-        self.request = kwargs.pop('request') if 'request' in kwargs else None
+#         # Store the request object
+#         self.request = kwargs.pop('request') if 'request' in kwargs else None
 
-        # Unsure what this does, will research
-        super(ProjectForm, self).__init__(*args, **kwargs)
+#         # Unsure what this does, will research
+#         super(ProjectForm, self).__init__(*args, **kwargs)
 
-        # Adding queryset to materials field
-        if self.request != None:
-            self.fields['materials'].queryset = Material.objects.filter(created_by=self.request.user)
+#         # Adding queryset to materials field
+#         if self.request != None:
+#             self.fields['materials'].queryset = Material.objects.filter(created_by=self.request.user)

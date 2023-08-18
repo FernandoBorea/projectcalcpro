@@ -31,10 +31,16 @@ class Project(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200)
     description = models.CharField(max_length=3000, blank=True)
-    materials = models.ManyToManyField(to=Material, related_name='projects')
+    materials = models.ManyToManyField(to=Material, through='ProjectMaterialSet', related_name='projects')
     created_by = models.ForeignKey(to=User, on_delete=models.CASCADE)
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.name}'
-    
+
+class ProjectMaterialSet(models.Model):
+    id = models.AutoField(primary_key=True)
+    material = models.ForeignKey(to=Material, on_delete=models.CASCADE)
+    project = models.ForeignKey(to=Project, on_delete=models.CASCADE)
+    material_qty = models.PositiveIntegerField(default=1)
+
