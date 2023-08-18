@@ -57,20 +57,20 @@ def materials(request):
 @login_required(login_url='login')
 def projects(request):
 
-    # if request.method == 'POST':
-    #     project_form = ProjectForm(request.POST, request=request)
+    if request.method == 'POST':
+        project_form = ProjectForm(request.POST, request=request)
 
-    #     if project_form.is_valid():
+        if project_form.is_valid():
             
-    #         # Takes form instance and turn it into model instance
-    #         new_project = project_form.save(commit=False)
+            # Takes form instance and turn it into model instance
+            new_project = project_form.save(commit=False)
 
-    #         # Fill missing data
-    #         new_project.created_by = request.user
-    #         new_project.save()
-    #         project_form.save_m2m()
+            # Fill missing data
+            new_project.created_by = request.user
+            new_project.save()
+            project_form.save_m2m()
 
-    #         return HttpResponseRedirect(reverse('projects'))
+            return HttpResponseRedirect(reverse('projects'))
 
     projects = Project.objects.filter(created_by=request.user).order_by('created_on')
     paginator = Paginator(projects, 9)
@@ -91,12 +91,10 @@ def projects(request):
     page_range = paginator.page_range
    
     return render(request, 'projectcalculator/projects.html', {
-        # 'project_form': ProjectForm(request=request),
+        'project_form': ProjectForm(request=request),
         'projects_page_obj': page_obj,
         'paginator_range': page_range
     })
-
-# Fix error on projects view, it's not receiving materials
 
 
 @login_required(login_url='saved_projects')

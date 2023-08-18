@@ -40,6 +40,7 @@
             
             <input type="submit" class='btn btn-outline-primary' value="Create Project">
         </form>
+        
     </div>
 
     <div class="mb-3 projects-card-container">
@@ -61,7 +62,7 @@
                                 <h6 class="card-subtitle text-body-secondary">Materials:</h6>
 
                                 <ul class="list-group list-group-flush">
-                                    {% for material in project.materials.all | slice: ':3' %}
+                                    {% for material in project.materials.all %}
                                         <li class="list-group-item">{{ material.name }}</li>
                                         {% empty %}
                                         <div class="alert alert-secondary">This project doesn't have materials</div>
