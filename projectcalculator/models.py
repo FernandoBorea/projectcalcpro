@@ -40,7 +40,7 @@ class Project(models.Model):
 
 class ProjectMaterialSet(models.Model):
     id = models.AutoField(primary_key=True)
-    material = models.ForeignKey(to=Material, on_delete=models.CASCADE)
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE)
+    material = models.ForeignKey(to=Material, on_delete=models.CASCADE)
     material_qty = models.PositiveIntegerField(default=1)
 
