@@ -58,7 +58,7 @@ def materials(request):
 def projects(request):
 
     if request.method == 'POST':
-        project_form = ProjectForm(request.POST, request=request)
+        project_form = ProjectForm(request.POST, user=request.user)
 
         if project_form.is_valid():
             
@@ -91,9 +91,10 @@ def projects(request):
     page_range = paginator.page_range
    
     return render(request, 'projectcalculator/projects.html', {
-        'project_form': ProjectForm(request=request),
+        'project_form': ProjectForm(user=request.user),
         'projects_page_obj': page_obj,
-        'paginator_range': page_range
+        'paginator_range': page_range,
+        'materialset_form': ProjectMaterialSetForm(material_id=1)
     })
 
 
