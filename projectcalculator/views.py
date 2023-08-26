@@ -6,6 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.core.paginator import Paginator
 from .forms import *
+from django.db.models import F
 
 # Create your views here.
 @login_required(login_url='login')
@@ -58,26 +59,15 @@ def materials(request):
 def projects(request):
 
     if request.method == 'POST':
-        project_form = ProjectForm(request.POST, request=request)
-
-        if project_form.is_valid():
-            
-            # Takes form instance and turn it into model instance
-            new_project = project_form.save(commit=False)
-
-            # Fill missing data
-            new_project.created_by = request.user
-            new_project.save()
-            project_form.save_m2m()
-
-            return HttpResponseRedirect(reverse('projects'))
+        # Process formset
+        pass
 
     projects = Project.objects.filter(created_by=request.user).order_by('created_on')
     paginator = Paginator(projects, 9)
 
     # Check if we got a valid page GET argument
     requested_page = request.GET.get('page', '1')
-
+    
     try:
         requested_page = int(requested_page)
     except ValueError:
@@ -89,11 +79,18 @@ def projects(request):
     # If we don't have any errors, return requested page
     page_obj = paginator.get_page(requested_page)
     page_range = paginator.page_range
+
+    # Research this
+    initial = Material.objects.values(material=F('id'), material_name=F('name'))
+    formset = ProjectMaterialSetFormSet(initial=initial)
+    # Not so sure about why minus 1 here. I did it 
+    # in my code. Remove it if you find problem. 
+    formset.extra = len(initial) - 1
    
     return render(request, 'projectcalculator/projects.html', {
-        'project_form': ProjectForm(request=request),
         'projects_page_obj': page_obj,
-        'paginator_range': page_range
+        'paginator_range': page_range,
+        'formset': formset
     })
 
 

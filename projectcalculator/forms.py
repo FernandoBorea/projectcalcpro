@@ -1,5 +1,6 @@
 from django import forms
 from .models import *
+from django.utils.functional import cached_property
 
 
 class LoginForm(forms.Form):
@@ -27,29 +28,80 @@ class MaterialForm(forms.ModelForm):
             'price': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter the material unit of measure'})
         }
 
+class ProjectMaterialSetFormSet(forms.BaseModelFormSet):
 
-class ProjectForm(forms.ModelForm):
+    # Research what this does
+    extra = 0
+    can_delete = True
+    can_order = False
+    max_num = 1000
+    validate_max = False
 
-    class Meta:
-        model = Project
-        fields = ('name', 'description', 'materials')
+    # If you want to enforce each project to have at least
+    # one material, set validate_min to True. Research this.
+    min_num = 1
+    validate_min = False
+    absolute_max = 1000
+    can_delete_extra = True
+    renderer = forms.renderers.get_default_renderer()
 
-        materials = forms.ModelMultipleChoiceField(queryset=None)
+    model = ProjectMaterialSet
 
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter the project name'}),
-            'description': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter the project description', 'rows': '5'}),
-            'materials': forms.CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
-        }
+    #Research why do I need to nest classes
+    class ProjectMaterialSetForm(forms.ModelForm):
 
-    def __init__(self, *args, **kwargs):
+        # Add an extra name field to help form rendering
+        material_name = forms.CharField(max_length=200, required=False)
+        class Meta:
+            model = ProjectMaterialSet
+            fields = ['material', 'material_qty']
+    
+    # Research this
+    form = ProjectMaterialSetForm
 
-        # Store the request object
-        self.request = kwargs.pop('request') if 'request' in kwargs else None
+    # ProjectForm is like another management form for the formset: 
+    # rendered, validated and saved together with formset. Research this.
+    class ProjectForm(forms.ModelForm):
+        class Meta:
+            model = Project
+            fields = ['name', 'description']
 
-        # Unsure what this does, will research
-        super(ProjectForm, self).__init__(*args, **kwargs)
+            widgets = {
+                'name': forms.TextInput(attrs={'class': 'form-control mb-3', 'placeholder': 'Enter the project name'}),
+                'description': forms.Textarea(attrs={'class': 'form-control mb-3', 'placeholder': 'Enter the project description', 'rows': '5'}),
+            }
 
-        # Adding queryset to materials field
-        if self.request != None:
-            self.fields['materials'].queryset = Material.objects.filter(created_by=self.request.user)
+    @cached_property
+    def project_form(self):
+        if self.is_bound:
+            form = self.ProjectForm(self.data, self.files, prefix=self.prefix)
+            form.full_clean()
+        else:
+            form = self.ProjectForm(prefix=self.prefix)
+        return form
+
+    def clean(self):
+        super().clean()
+        if not self.project_form.is_valid():
+            raise forms.ValidationError('Project form invalid')
+
+    def save(self, commit=True):
+        project = self.project_form.save(commit=commit)
+        for form in self:
+            form.instance.project = project
+        return super(ProjectMaterialSetFormSet, self).save(commit=commit)
+        # return project if you want the instance for further operation,
+        # but just don't forget to call super().save()
+
+    def get_queryset(self):
+        # Override get_queryset to return none if not specified. 
+        # Otherwise, it just returns all. 
+        if not hasattr(self, '_queryset'):
+            if self.queryset is not None:
+                qs = self.queryset
+            else:
+                qs = self.model.objects.none()
+            if not qs.ordered:
+                qs = qs.order_by(self.model._meta.pk.name)
+            self._queryset = qs
+        return self._queryset
