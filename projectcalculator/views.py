@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.core.paginator import Paginator
 from .forms import *
-from django.db.models import F
+from django.db.models import F, Value
 
 # Create your views here.
 @login_required(login_url='login')
@@ -59,8 +59,24 @@ def materials(request):
 def projects(request):
 
     if request.method == 'POST':
+
+        # print(f'Request object: {request}')
+        # print(f'POST info: {request.POST}')
+
         # Process formset
-        pass
+        formset = ProjectMaterialSetFormSet(request.POST, prefix='proj-mats')
+        project_form = ProjectMaterialSetFormSet.ProjectForm(request.POST, prefix='proj-mats')
+
+        if not project_form.is_valid():
+             print('Project Form Errors:', project_form.errors) # Project Form Errors: <ul class="errorlist"><li>name<ul class="errorlist"><li>This field is required.</li></ul></li></ul>
+
+        if formset.is_valid():
+            print('Valid form')
+            formset.save()
+        # else:
+        #     print(f'Invalid form, errors: {formset.errors}')
+        #     print(formset.non_form_errors())
+
 
     projects = Project.objects.filter(created_by=request.user).order_by('created_on')
     paginator = Paginator(projects, 9)
@@ -81,10 +97,11 @@ def projects(request):
     page_range = paginator.page_range
 
     # Research this
-    initial = Material.objects.values(material=F('id'), material_name=F('name'))
+    initial = Material.objects.values(material=F('id'), material_name=F('name')).annotate(DELETE=Value(True))
     formset = ProjectMaterialSetFormSet(initial=initial)
     # Not so sure about why minus 1 here. I did it 
     # in my code. Remove it if you find problem. 
+    # Nando: Probably it's starting at index 0
     formset.extra = len(initial) - 1
    
     return render(request, 'projectcalculator/projects.html', {

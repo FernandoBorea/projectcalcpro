@@ -38,7 +38,7 @@
                             <tr>
                                 <input type="hidden" name="{{ form.prefix }}-material" value="{{ form.material.value }}">
                                 <input type="hidden" name="{{ form.prefix }}-material_name" value="{{ form.material_name.value }}">
-                                <th scope="row"><input type="checkbox" name="{{ form.prefix }}-DELETE" {{ form.DELETE.value|yesno:'checked,' }} class="form-check-input" id="id-{{ form.prefix }}-DELETE"></th>
+                                <th scope="row"><input type="checkbox" name="{{ form.prefix }}-DELETE" {{ form.DELETE.value|yesno:',checked' }} class="form-check-input" id="id-{{ form.prefix }}-DELETE"></th>
                                 <td><label for="id-{{ form.prefix }}-DELETE" class="form-label">{{ form.material_name.value }}</label></td>
                                 <td><input type="number" step="1" class="form-control" name="{{ form.prefix }}-material_qty" value="{{ form.material_qty.value }}"></td>
                             </tr>
@@ -52,7 +52,7 @@
         
     </div>
 
-    <div class="mb-3 projects-card-container">
+    <div class="m-3 projects-card-container">
         
         {% if not projects_page_obj %}
             <div class="alert alert-secondary">Your created projects will show here:D</div>
