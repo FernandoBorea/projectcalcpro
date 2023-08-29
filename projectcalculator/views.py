@@ -71,8 +71,8 @@ def projects(request):
              print('Project Form Errors:', project_form.errors) # Project Form Errors: <ul class="errorlist"><li>name<ul class="errorlist"><li>This field is required.</li></ul></li></ul>
 
         if formset.is_valid():
-            print('Valid form')
-            formset.save()
+            # print('Valid form')
+            formset.save(request.user)
         # else:
         #     print(f'Invalid form, errors: {formset.errors}')
         #     print(formset.non_form_errors())
@@ -98,7 +98,7 @@ def projects(request):
 
     # Research this
     initial = Material.objects.values(material=F('id'), material_name=F('name')).annotate(DELETE=Value(True))
-    formset = ProjectMaterialSetFormSet(initial=initial)
+    formset = ProjectMaterialSetFormSet(initial=initial, prefix='proj-mats')
     # Not so sure about why minus 1 here. I did it 
     # in my code. Remove it if you find problem. 
     # Nando: Probably it's starting at index 0

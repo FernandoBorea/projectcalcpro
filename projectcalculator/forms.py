@@ -85,11 +85,15 @@ class ProjectMaterialSetFormSet(forms.BaseModelFormSet):
         if not self.project_form.is_valid():
             raise forms.ValidationError('Project form invalid')
 
-    def save(self, commit=True):
-        project = self.project_form.save(commit=commit)
+    def save(self, user):
+        project = self.project_form.save(commit=False)
+        project.created_by = user
+        project.save()
+
         for form in self:
             form.instance.project = project
-        return super(ProjectMaterialSetFormSet, self).save(commit=commit)
+            
+        return super(ProjectMaterialSetFormSet, self).save()
         # return project if you want the instance for further operation,
         # but just don't forget to call super().save()
 
