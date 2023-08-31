@@ -57,9 +57,10 @@
                         <div class="material-card-container card shadow border border-1 rounded-3 col m-3">
                             <div class="card-body">
                                 <h5 class="card-title">{{ material.name }}</h5>
-                                <p class="card-text">{{ material.description|truncatewords:30 }}</p>
+                                <hr>
+                                <p class="card-text">{{ material.description }}</p>
                                 <h6 class="card-subtitle mb-3 text-body-secondary">${{ material.price }}/{{ material.unit }}</h6>
-                                <a href="#" class="btn btn-outline-primary">View material</a>
+                                <a href="#" class="btn btn-outline-secondary">Edit</a>
                             </div>
                         </div>
                     </div>
