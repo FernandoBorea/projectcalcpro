@@ -38,6 +38,15 @@ class Project(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+    def project_cost(self):
+        
+        total_cost = 0
+
+        for material_set in self.projectmaterialset_set.all():
+            total_cost += material_set.material.price * material_set.material_qty
+        
+        return total_cost
+
 class ProjectMaterialSet(models.Model):
     id = models.AutoField(primary_key=True)
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE)
