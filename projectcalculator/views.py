@@ -221,3 +221,12 @@ def delete_project(request):
     return JsonResponse({
         'error': 'Invalid method'
     }, status=405)
+
+
+def edit_material(request):
+    
+    return render(request, 'projectcalculator/edit_material.html')
+
+
+def edit_project(request):
+    pass

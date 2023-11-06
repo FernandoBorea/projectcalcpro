@@ -1,0 +1,47 @@
+{% extends 'projectcalculator/layout.html' %}
+
+{% block body %}
+
+    <div class='p-3 m-3 shadow border border-1 rounded-3 col-8 mx-auto'>
+
+        {% if message %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+
+        <h1 class='mb-3'>Edit Material</h1>
+        <hr>
+        <form clas="mt-3" method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="{{ material_form.name.id_for_label }}" class="form-label">Material Name</label>
+                {{ material_form.name }}
+            </div>
+
+            <div class="mb-3">
+                <label for="{{ material_form.description.id_for_label }}" class="form-label">Material Description</label>
+                {{ material_form.description }}
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="{{ material_form.price.id_for_label }}" class="form-label">Price</label>
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        {{ material_form.price }}
+                    </div>
+                </div>
+
+                <div class="col">
+                    <label for="{{ material_form.unit.id_for_label }}" class="form-label">Units</label>
+                    {{ material_form.unit }}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-outline-primary">Edit</button>
+        </form>
+    </div>
+
+{% endblock %}
