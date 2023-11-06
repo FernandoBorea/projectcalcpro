@@ -1,6 +1,9 @@
 {% extends 'projectcalculator/layout.html' %}
+{% load static %}
 
 {% block body %}
+
+    <script src="{% static 'projectcalculator/materials_script.js' %}"></script>
 
     <div class='p-3 m-3 shadow border border-1 rounded-3 col-8 mx-auto'>
 
@@ -53,14 +56,14 @@
             <div class="row row-cols-3">
 
                 {% for material in materials_page_obj %}
-                    <div>
+                    <div class="material-{{ material.id }}-container">
                         <div class="material-card-container card shadow border border-1 rounded-3 col m-3">
                             <div class="card-body">
                                 <h5 class="card-title">{{ material.name }}</h5>
                                 <hr>
                                 <p class="card-text">{{ material.description }}</p>
                                 <h6 class="card-subtitle mb-3 text-body-secondary">${{ material.price }}/{{ material.unit }}</h6>
-                                <a href="#" class="btn btn-outline-secondary">Edit</a>
+                                <button class="btn btn-outline-danger delete-material" data-material-id="{{ material.id }}">Delete</button>
                             </div>
                         </div>
                     </div>

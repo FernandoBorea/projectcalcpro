@@ -2,11 +2,12 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.core.paginator import Paginator
 from .forms import *
 from django.db.models import F, Value
+import json
 
 # Create your views here.
 @login_required(login_url='login')
@@ -188,3 +189,35 @@ def register(request):
     return render(request, 'projectcalculator/register.html', {
         'register_form': RegisterForm()
     })
+
+def delete_material(request):
+    
+    if request.method == 'DELETE':
+        material_id = json.loads(request.body)['material_id']
+        material = Material.objects.get(pk=material_id)
+        material.delete()
+
+        return JsonResponse({
+            'delete_response': True
+        }, status=200)
+
+    return JsonResponse({
+        'error': 'Invalid method'
+    }, status=405)
+
+        
+
+def delete_project(request):
+    
+    if request.method == 'DELETE':
+        project_id = json.loads(request.body)['project_id']
+        project = Project.objects.get(pk=project_id)
+        project.delete()
+
+        return JsonResponse({
+            'delete_response': True
+        }, status=200)
+
+    return JsonResponse({
+        'error': 'Invalid method'
+    }, status=405)

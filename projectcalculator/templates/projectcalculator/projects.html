@@ -1,6 +1,10 @@
 {% extends 'projectcalculator/layout.html' %}
+{% load static%}
+
 
 {% block body %}
+
+    <script src="{% static 'projectcalculator/projects_script.js' %}"></script>
 
     <div class='p-3 m-3 shadow border border-1 rounded-3 col-8 mx-auto'>
 
@@ -60,10 +64,10 @@
             <div class="row row-cols-3">
 
                 {% for project in projects_page_obj %}
-                    <div>
+                    <div class="project-{{ project.id }}-container">
                         <div class="material-card-container card shadow border border-1 rounded-3 col m-3">
                             <div class="card-body">
-                                <h5 class="card-title">{{ project.name }}</h5>
+                                <h5 class="card-title">{{ project.name }} ({{project.id}})</h5>
                                 <hr>
                                 <p class="card-text">{{ project.description }}</p>
 
@@ -81,7 +85,7 @@
 
                                 <h6 class="card-subtitle text-body-secondary mt-2 mb-2">Total cost: ${{ project.project_cost }}</h6>
 
-                                <a href="#" class="mt-3 btn btn-outline-secondary">Edit</a>
+                                <button class="mt-3 btn btn-outline-danger delete-project" data-project-id="{{ project.id }}">Delete</button>
                             </div>
                         </div>
                     </div>
