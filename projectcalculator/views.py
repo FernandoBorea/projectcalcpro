@@ -223,9 +223,14 @@ def delete_project(request):
     }, status=405)
 
 
-def edit_material(request):
+def edit_material(request, material_id):
     
-    return render(request, 'projectcalculator/edit_material.html')
+    material = Material.objects.get(pk=material_id)
+    material_form = MaterialForm(instance=material)
+
+    return render(request, 'projectcalculator/edit_material.html', {
+        'material_form': material_form
+    })
 
 
 def edit_project(request):
