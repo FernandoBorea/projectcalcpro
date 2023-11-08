@@ -224,8 +224,21 @@ def delete_project(request):
 
 
 def edit_material(request, material_id):
-    
+
     material = Material.objects.get(pk=material_id)
+
+    if request.method == 'POST':
+        form = MaterialForm(request.POST, instance=material)
+
+        if form.is_valid():
+            form.save()
+            HttpResponseRedirect(reverse('materials'))
+        
+        return render(request, 'projectcalculator/edit_material.html', {
+            'material_form': form,
+            'message': 'Invalid edit'
+        })
+    
     material_form = MaterialForm(instance=material)
 
     return render(request, 'projectcalculator/edit_material.html', {
