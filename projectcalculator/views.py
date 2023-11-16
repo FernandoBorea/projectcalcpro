@@ -232,7 +232,7 @@ def edit_material(request, material_id):
 
         if form.is_valid():
             form.save()
-            HttpResponseRedirect(reverse('materials'))
+            return HttpResponseRedirect(reverse('materials'))
         
         return render(request, 'projectcalculator/edit_material.html', {
             'material_form': form,

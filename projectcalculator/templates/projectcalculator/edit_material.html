@@ -6,7 +6,12 @@
 
         {% if message %}
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ message }}
+                {{ message }}, errors:
+                <ul>
+                    {% for field in material_form %}
+                        {{ field.errors }}
+                    {% endfor %}
+                </ul>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         {% endif %}
