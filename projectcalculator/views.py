@@ -245,6 +245,8 @@ def edit_material(request, material_id):
         'material_form': material_form
     })
 
+def save_project(request, project_id):
 
-def edit_project(request):
-    pass
+    user = request.user
+    project = Project.objects.get(pk=project_id)
+    user.saved_projects.add(project)
