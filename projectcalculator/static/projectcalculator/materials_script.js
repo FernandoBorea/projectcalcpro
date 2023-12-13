@@ -41,40 +41,25 @@ function deleteMaterial() {
     })
 }
 
-function saveProject(unsave = false) {
+function saveMaterial(unsave = false) {
 
     let material_id = this.dataset.materialId;
+    let user_id = this.dataset.userId;
+    let action = (!unsave)? 0 : 1;
 
-    if (!unsave)
-    {
         fetch('/save_project', {
             method: 'PUT',
             body: JSON.stringify({
-                'action': 0,
-                'material_id': material_id
+                'action': action,
+                'material_id': material_id,
+                'user_id': user_id
             })
         })
         .then(response => response.json())
         .then(data => {
             /*
-                Code to change status to saved and button to unsave
+                Code to change status to saved and button to unsave.
+                Use action to adjust this
             */
         })
-
-        return;
-    }
-
-    fetch('/save_project', {
-        method: 'PUT',
-        body: JSON.stringify({
-            'action': 1,
-            'material_id': material_id
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        /*
-            Code to change the status to unsaved and button to save
-        */
-    })
 }

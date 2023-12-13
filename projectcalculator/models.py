@@ -9,6 +9,7 @@ class User(AbstractUser):
     # For a default one-to-many, this is not ideal, but will enable multiple users
     # to track a single project on future versions
     saved_projects = models.ManyToManyField(to='Project', related_name='saved_by', blank=True)
+    saved_materials = models.ManyToManyField(to='Material', related_name='saved_by', blank=True)
 
     def __str__(self):
         return f'{self.username}'
