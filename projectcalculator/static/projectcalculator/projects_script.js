@@ -40,3 +40,26 @@ function deleteProject() {
         console.log(`Completed deletion of material ${project_id} with response: ${data}`);
     })
 }
+
+function saveProject(unsave = false) {
+
+    let project_id = this.dataset.projectId;
+    let user_id = this.dataset.userId;
+    let action = (!unsave)? 0 : 1;
+
+        fetch('/save_project', {
+            method: 'PUT',
+            body: JSON.stringify({
+                'action': action,
+                'project_id': project_id,
+                'user_id': user_id
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            /*
+                Code to change status to saved and button to unsave.
+                Use action to adjust this
+            */
+        })
+}

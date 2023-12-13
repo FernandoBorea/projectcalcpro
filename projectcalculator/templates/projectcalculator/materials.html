@@ -64,6 +64,7 @@
                                 <p class="card-text">{{ material.description }}</p>
                                 <h6 class="card-subtitle mb-3 text-body-secondary">${{ material.price }}/{{ material.unit }}</h6>
                                 <a href="/edit_material/{{ material.id }}" class="btn btn-outline-secondary" role="button">Edit</a>
+                                <button class="btn btn-outline-info save-material" data-material-id="{{ material.id }}" data-user-id="{{ user.id }}">Edit</button>
                                 <button class="btn btn-outline-danger delete-material" data-material-id="{{ material.id }}">Delete</button>
                             </div>
                         </div>

@@ -47,7 +47,7 @@ function saveMaterial(unsave = false) {
     let user_id = this.dataset.userId;
     let action = (!unsave)? 0 : 1;
 
-        fetch('/save_project', {
+        fetch('/save_material', {
             method: 'PUT',
             body: JSON.stringify({
                 'action': action,
