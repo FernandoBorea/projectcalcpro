@@ -40,3 +40,41 @@ function deleteMaterial() {
         console.log(`Completed deletion of material ${material_id} with response: ${data}`);
     })
 }
+
+function saveProject(unsave = false) {
+
+    let material_id = this.dataset.materialId;
+
+    if (!unsave)
+    {
+        fetch('/save_project', {
+            method: 'PUT',
+            body: JSON.stringify({
+                'action': 0,
+                'material_id': material_id
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            /*
+                Code to change status to saved and button to unsave
+            */
+        })
+
+        return;
+    }
+
+    fetch('/save_project', {
+        method: 'PUT',
+        body: JSON.stringify({
+            'action': 1,
+            'material_id': material_id
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        /*
+            Code to change the status to unsaved and button to save
+        */
+    })
+}
