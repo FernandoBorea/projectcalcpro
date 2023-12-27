@@ -267,8 +267,66 @@ def edit_material(request, material_id):
         'material_form': material_form
     })
 
-def save_project(request, project_id):
+def save_project(request):
 
-    user = request.user
-    project = Project.objects.get(pk=project_id)
-    user.saved_projects.add(project)
+    if request.method == 'PUT':
+        project_id = json.loads(request.body)['project_id']
+        user_id = json.loads(request.body)['user_id']
+        action = json.loads(request.body)['action']
+
+        project = Project.objects.get(pk=project_id)
+        user = User.objects.get(pk=user_id)
+
+        if (action == 0):
+            user.saved_materials.add(project)
+
+        elif (action == 1):
+            user.saved_materials.remove(project)
+        
+        else:
+            return JsonResponse({
+                'save_project_response': False,
+                'message': 'Invalid action'
+            })
+        
+        return JsonResponse({
+            'saved_project_response': True,
+            'message': 'Project saved successfully'
+        })
+
+    return JsonResponse({
+        'saved_project_response': False,
+        'message': 'Invalid method'
+    })
+
+def save_material(request):
+    
+    if request.method == 'PUT':
+        material_id = json.loads(request.body)['material_id']
+        user_id = json.loads(request.body)['user_id']
+        action = json.loads(request.body)['action']
+
+        material = Material.objects.get(pk=material_id)
+        user = User.objects.get(pk=user_id)
+
+        if (action == 0):
+            user.saved_materials.add(material)
+
+        elif (action == 1):
+            user.saved_materials.remove(material)
+        
+        else:
+            return JsonResponse({
+                'save_material_response': False,
+                'message': 'Invalid action'
+            })
+        
+        return JsonResponse({
+            'saved_material_response': True,
+            'message': 'Material saved successfully'
+        })
+
+    return JsonResponse({
+        'saved_material_response': False,
+        'message': 'Invalid method'
+    })
