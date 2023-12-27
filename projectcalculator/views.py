@@ -12,7 +12,29 @@ import json
 # Create your views here.
 @login_required(login_url='login')
 def index(request):
-    return render(request, 'projectcalculator/index.html')
+
+    projects = request.user.saved_projects.all()
+    paginator = Paginator(projects, 9)
+
+    # Check if we got a valid page GET argument
+    requested_page = request.GET.get('page', '1')
+    
+    try:
+        requested_page = int(requested_page)
+    except ValueError:
+        return HttpResponseRedirect(reverse('projects'))
+    
+    if requested_page > paginator.num_pages:
+        return HttpResponseRedirect(reverse('projects'))
+    
+    # If we don't have any errors, return requested page
+    page_obj = paginator.get_page(requested_page)
+    page_range = paginator.page_range
+
+    return render(request, 'projectcalculator/index.html', {
+        'projects_page_obj': page_obj,
+        'paginator_range': page_range
+    })
 
 
 @login_required(login_url='login')
