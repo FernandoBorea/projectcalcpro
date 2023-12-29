@@ -1,9 +1,15 @@
+const save_material_listener = function() {saveMaterial()};
+const unsave_material_listener = function() {saveMaterial(unsave = true)};
+
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.delete-material').forEach(element => {
         element.addEventListener('click', deleteMaterial);
     })
     document.querySelectorAll('.save-material').forEach(element => {
-        element.addEventListener('click', saveMaterial);
+        element.addEventListener('click', save_material_listener);
+    })
+    document.querySelectorAll('.unsave-material').forEach(element => {
+        element.addEventListener('click', unsave_material_listener);
     })
 })
 
@@ -46,8 +52,9 @@ function deleteMaterial() {
 
 function saveMaterial(unsave = false) {
 
-    let material_id = this.dataset.materialId;
-    let user_id = this.dataset.userId;
+    let button = event.target;
+    let material_id = button.dataset.materialId;
+    let user_id = button.dataset.userId;
     let action = (!unsave)? 0 : 1;
     let csrf_token = getCookie('csrftoken');
 
@@ -62,9 +69,16 @@ function saveMaterial(unsave = false) {
         })
         .then(response => response.json())
         .then(data => {
-            /*
-                Code to change status to saved and button to unsave.
-                Use action to adjust this
-            */
+            if (action == 0) {
+                button.className = "btn btn-outline-primary unsave-material";
+                button.innerHTML = "Unsave";
+                button.removeEventListener('click', save_material_listener);
+                button.addEventListener('click', unsave_material_listener);
+            } else {
+                button.className = "btn btn-outline-primary save-material";
+                button.innerHTML = "Save";
+                button.removeEventListener('click', unsave_material_listener);
+                button.addEventListener('click', save_material_listener);
+            }
         })
 }

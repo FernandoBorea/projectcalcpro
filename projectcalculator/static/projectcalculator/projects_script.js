@@ -1,9 +1,15 @@
+const save_project_listener = function() {saveProject()};
+const unsave_project_listener = function() {saveProject(unsave = true)};
+
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.delete-project').forEach(element => {
         element.addEventListener('click', deleteProject);
     })
     document.querySelectorAll('.save-project').forEach(element => {
-        element.addEventListener('click', saveProject);
+        element.addEventListener('click', save_project_listener);
+    })
+    document.querySelectorAll('.unsave-project').forEach(element => {
+        element.addEventListener('click', unsave_project_listener);
     })
 })
 
@@ -46,8 +52,9 @@ function deleteProject() {
 
 function saveProject(unsave = false) {
 
-    let project_id = this.dataset.projectId;
-    let user_id = this.dataset.userId;
+    let button = event.target;
+    let project_id = button.dataset.projectId;
+    let user_id = button.dataset.userId;
     let action = (!unsave)? 0 : 1;
     let csrf_token = getCookie('csrftoken');
 
@@ -62,9 +69,16 @@ function saveProject(unsave = false) {
         })
         .then(response => response.json())
         .then(data => {
-            /*
-                Code to change status to saved and button to unsave.
-                Use action to adjust this
-            */
+            if (action == 0) {
+                button.className = "mt-3 btn btn-outline-primary unsave-project";
+                button.innerHTML = "Unsave";
+                button.removeEventListener('click', save_project_listener);
+                button.addEventListener('click', unsave_project_listener);
+            } else {
+                button.className = "mt-3 btn btn-outline-primary save-project";
+                button.innerHTML = "Save";
+                button.removeEventListener('click', unsave_project_listener);
+                button.addEventListener('click', save_project_listener);
+            }
         })
 }

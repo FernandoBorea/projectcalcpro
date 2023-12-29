@@ -14,7 +14,7 @@ import json
 def index(request):
 
     projects = request.user.saved_projects.all()
-    paginator = Paginator(projects, 9)
+    project_paginator = Paginator(projects, 9)
 
     # Check if we got a valid page GET argument
     requested_page = request.GET.get('page', '1')
@@ -24,16 +24,36 @@ def index(request):
     except ValueError:
         return HttpResponseRedirect(reverse('projects'))
     
-    if requested_page > paginator.num_pages:
+    if requested_page > project_paginator.num_pages:
         return HttpResponseRedirect(reverse('projects'))
     
     # If we don't have any errors, return requested page
-    page_obj = paginator.get_page(requested_page)
-    page_range = paginator.page_range
+    projects_page_obj = project_paginator.get_page(requested_page)
+    projects_page_range = project_paginator.page_range
+
+    materials = request.user.saved_materials.all()
+    materials_paginator = Paginator(materials, 9)
+
+    # Check if we got a valid page GET argument
+    requested_page = request.GET.get('page', '1')
+
+    try:
+        requested_page = int(requested_page)
+    except ValueError:
+        return HttpResponseRedirect(reverse('materials'))
+    
+    if requested_page > materials_paginator.num_pages:
+        return HttpResponseRedirect(reverse('materials'))
+    
+    # If we don't have any errors, return requested page
+    materials_page_obj = materials_paginator.get_page(requested_page)
+    materials_page_range = materials_paginator.page_range
 
     return render(request, 'projectcalculator/index.html', {
-        'projects_page_obj': page_obj,
-        'paginator_range': page_range
+        'projects_page_obj': projects_page_obj,
+        'project_paginator_range': projects_page_range,
+        'materials_page_obj': materials_page_obj,
+        'materials_paginator_range': materials_page_range
     })
 
 
@@ -278,10 +298,10 @@ def save_project(request):
         user = User.objects.get(pk=user_id)
 
         if (action == 0):
-            user.saved_materials.add(project)
+            user.saved_projects.add(project)
 
         elif (action == 1):
-            user.saved_materials.remove(project)
+            user.saved_projects.remove(project)
         
         else:
             return JsonResponse({
