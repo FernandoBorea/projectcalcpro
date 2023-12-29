@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.delete-material').forEach(element => {
-        element.addEventListener('click', deleteMaterial)
+        element.addEventListener('click', deleteMaterial);
+    })
+    document.querySelectorAll('.save-material').forEach(element => {
+        element.addEventListener('click', saveMaterial);
     })
 })
 
@@ -46,9 +49,11 @@ function saveMaterial(unsave = false) {
     let material_id = this.dataset.materialId;
     let user_id = this.dataset.userId;
     let action = (!unsave)? 0 : 1;
+    let csrf_token = getCookie('csrftoken');
 
         fetch('/save_material', {
             method: 'PUT',
+            headers: {'X-CSRFToken': csrf_token},
             body: JSON.stringify({
                 'action': action,
                 'material_id': material_id,

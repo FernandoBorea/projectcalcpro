@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.delete-project').forEach(element => {
-        element.addEventListener('click', deleteProject)
+        element.addEventListener('click', deleteProject);
+    })
+    document.querySelectorAll('.save-project').forEach(element => {
+        element.addEventListener('click', saveProject);
     })
 })
 
@@ -46,9 +49,11 @@ function saveProject(unsave = false) {
     let project_id = this.dataset.projectId;
     let user_id = this.dataset.userId;
     let action = (!unsave)? 0 : 1;
+    let csrf_token = getCookie('csrftoken');
 
         fetch('/save_project', {
             method: 'PUT',
+            headers: {'X-CSRFToken': csrf_token},
             body: JSON.stringify({
                 'action': action,
                 'project_id': project_id,
