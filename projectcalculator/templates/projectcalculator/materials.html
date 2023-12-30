@@ -53,11 +53,11 @@
             <div class="alert alert-secondary">Your created materials will show here:D</div>
         {% else %}
 
-            <div class="row row-cols-3">
+            <div class="row row-cols-1 row-cols-sm-3">
 
                 {% for material in materials_page_obj %}
-                    <div class="material-{{ material.id }}-container">
-                        <div class="material-card-container card shadow border border-1 rounded-3 col m-3">
+                    <div class="material-{{ material.id }}-container col">
+                        <div class="material-card-container card shadow border border-1 rounded-3 m-3">
                             <div class="card-body">
                                 <h5 class="card-title">{{ material.name }}</h5>
                                 <hr>

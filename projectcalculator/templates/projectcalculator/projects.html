@@ -61,11 +61,11 @@
         {% if not projects_page_obj %}
             <div class="alert alert-secondary">Your created projects will show here:D</div>
         {% else %}
-            <div class="row row-cols-3">
+            <div class="row row-cols-1 row-cols-sm-3">
 
                 {% for project in projects_page_obj %}
                     <div class="project-{{ project.id }}-container">
-                        <div class="material-card-container card shadow border border-1 rounded-3 col m-3">
+                        <div class="material-card-container card shadow border border-1 rounded-3 m-3">
                             <div class="card-body">
                                 <h5 class="card-title">{{ project.name }}</h5>
                                 <hr>
